@@ -179,13 +179,13 @@ class VacuumCleaner::NormalizationsTest < Test::Unit::TestCase
           include VacuumCleaner::Normalizations
           attr_accessor :name
           normalizes(:name) do |object, attribute, value|
-            "#{object.object_id}-#{attribute}-#{value}"
+            [object.object_id, attribute, value]
           end
         end
         
         obj = klass.new
         obj.name = "Carla"
-        assert_equal "#{obj.object_id}-name-Carla", obj.name
+        assert_equal [obj.object_id, :name, "Carla"], obj.name
       end
     end
   end

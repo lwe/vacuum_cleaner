@@ -2,7 +2,7 @@ require 'test_helper'
 require 'vacuum_cleaner/normalizer'
 require 'vacuum_cleaner/normalizations/method'
 
-class VacuumCleaner::Normalizations::MethodNormalizerTest < Test::Unit::TestCase
+class VacuumCleaner::Normalizations::MethodTest < Test::Unit::TestCase
   include VacuumCleaner::Normalizations
   
   context "MethodNormalizer" do

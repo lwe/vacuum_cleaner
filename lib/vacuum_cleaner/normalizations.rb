@@ -27,9 +27,10 @@ module VacuumCleaner
         end
         
         attributes.each do |attribute|
+          attribute = attribute.to_sym
           send(:define_method, :"normalize_#{attribute}") do |value|
-            value = normalizers.inject(value) { |v,n| n.normalize(self, attribute.to_sym, v) }
-            block_given? ? (block.arity == 1 ? yield(value) : yield(self, attribute.to_sym, value)) : value
+            value = normalizers.inject(value) { |v,n| n.normalize(self, attribute, v) }
+            block_given? ? (block.arity == 1 ? yield(value) : yield(self, attribute, value)) : value
           end
           
           rb_src = unless instance_methods.include?("#{attribute}=")
@@ -39,7 +40,7 @@ module VacuumCleaner
             "send('#{attribute}#{VacuumCleaner::WITHOUT_NORMALIZATION_SUFFIX}=', value)"
           end
           
-          module_eval "def #{attribute}=(value); value = send(:'normalize_#{attribute}', value); #{rb_src} end", __FILE__, __LINE__
+          module_eval "def #{attribute}=(value); value = send(:'normalize_#{attribute}', value); #{rb_src}; end", __FILE__, __LINE__
         end
       end      
     end    

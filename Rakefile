@@ -30,9 +30,11 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gemspec|
     gemspec.name = "vacuum_cleaner"
-    gemspec.summary = "TODO"
+    gemspec.summary = "Ruby (and Rails) attribute cleaning support, provides some nice default normalization strategies."
     description = <<-DESC
-    TODO
+      ** Swoooosh ** - and all those leading and trailing whitespaces are gone, or ** Frooom ** - and the value
+      is normalized to always be prefixed by 'http://' and much more. Works with both plain old Ruby and Rails (ActiveModel
+      and ActiveSupport).
     DESC
     gemspec.description = description.strip
     gemspec.email = "lukas.westermann@gmail.com"
@@ -43,7 +45,7 @@ begin
     
     gemspec.add_development_dependency('shoulda', '>= 2.10.2')
     gemspec.add_development_dependency('rr', '>= 0.10.5')
-    gemspec.add_development_dependency('activesupport', '>= 2.3.5')
+    # gemspec.add_development_dependency('activesupport', '>= 2.3.5')
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError

@@ -50,32 +50,32 @@ class VacuumCleaner::NormalizationsTest < Test::Unit::TestCase
       should "take multiple symbols as argument" do
         klass = Class.new { include VacuumCleaner::Normalizations; normalizes(:name, :first_name) }
         assert_respond_to klass, :normalizes
-        #assert_respond_to klass, :normalize_name
-        #assert_respond_to klass, :normalize_first_name
       end
 
       should "create a setter for supplied attribute" do
         obj = Class.new { include VacuumCleaner::Normalizations; normalizes(:name) }.new
         assert_respond_to obj, :name=
+        assert_respond_to obj, :normalize_name
       end
 
       should "set the instance variable using the setter" do
-        obj = Class.new { include VacuumCleaner::Normalizations; normalizes(:name) }.new
+        obj = Class.new { include VacuumCleaner::Normalizations; attr_reader :name; normalizes(:name) }.new
         obj.name = "J.D."
-        assert_equal "J.D.", obj.instance_variable_get(:@name)
+        assert_equal "J.D.", obj.name
       end
       
       should "alias method to <attr>_without_normalization= if <attr>= already defined" do
         klass = Class.new do
           include VacuumCleaner::Normalizations
+          attr_reader :name, :foo
           def name=(name); @foo = name end
           normalizes :name
         end
         obj = klass.new
         obj.name = "Elliot Reid"
         assert_respond_to obj, :name_without_normalization=
-        assert_equal "Elliot Reid", obj.instance_variable_get(:@foo)
-        assert_nil obj.instance_variable_get(:@name)
+        assert_equal "Elliot Reid", obj.foo
+        assert_nil obj.name
       end
 
       should "convert any blank input, like empty string, nil etc. to => <nil>" do

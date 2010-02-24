@@ -7,7 +7,7 @@ module VacuumCleaner
     def self.included(base)
       base.extend(ClassMethods)
     end
-    
+        
     module ClassMethods
       def normalizes(*attributes, &block)
         metaklass = class << self; self; end
@@ -32,15 +32,19 @@ module VacuumCleaner
             value = normalizers.inject(value) { |v,n| n.normalize(self, attribute, v) }
             block_given? ? (block.arity == 1 ? yield(value) : yield(self, attribute, value)) : value
           end
+          original_setter = "#{attribute}#{VacuumCleaner::WITHOUT_NORMALIZATION_SUFFIX}=".to_sym
+          send(:alias_method, original_setter, "#{attribute}=") if instance_methods.include?("#{attribute}=")
+                    
+          rb_src = <<-RUBY
+            def #{attribute}=(value)                                                                          #  1.  def name=(value)
+              value = send(:'normalize_#{attribute}', value)                                                  #  2.    value = send(:'normalize_name', value)
+              return send(#{original_setter.inspect}, value) if respond_to?(#{original_setter.inspect})       #  3.    return send(:'name_wo...=', value) if respond_to?(:'name_wo...=')
+              return send(:write_attribute, #{attribute.inspect}, value) if respond_to?(:write_attribute)     #  4.    return send(:write_attribute, :name, value) if respond_to?(:write_attribute)
+              @#{attribute} = value                                                                           #  5.   @name = value
+            end                                                                                               #  6.  end
+          RUBY
           
-          rb_src = unless instance_methods.include?("#{attribute}=")
-            "@#{attribute} = value"
-          else
-            send(:alias_method, "#{attribute}#{VacuumCleaner::WITHOUT_NORMALIZATION_SUFFIX}=", "#{attribute}=")
-            "send('#{attribute}#{VacuumCleaner::WITHOUT_NORMALIZATION_SUFFIX}=', value)"
-          end
-          
-          module_eval "def #{attribute}=(value); value = send(:'normalize_#{attribute}', value); #{rb_src}; end", __FILE__, __LINE__
+          module_eval rb_src, __FILE__, __LINE__
         end
       end      
     end    

@@ -3,13 +3,6 @@ require 'rake/testtask'
 require 'yard'
 require File.join(File.dirname(__FILE__), 'lib', 'vacuum_cleaner')
 
-#def gravatarify_version
-#  @gravatarify_version ||= (tmp = YAML.load(File.read('VERSION.yml'))) && [tmp[:major], tmp[:minor], tmp[:patch]] * '.'
-#end
-
-desc 'Default: run unit tests.'
-task :default => :test
-
 desc 'Test the vacuum_cleaner plugin.'
 Rake::TestTask.new(:test) do |t|
   t.libs << 'lib'
@@ -23,7 +16,7 @@ YARD::Rake::YardocTask.new(:doc) do |t|
   t.files = ['lib/**/*.rb']
   t.options = [
       "--readme", "README.md",
-      "--title", "vacuum_cleaner (vBETA) API Documentation"
+      "--title", "vacuum_cleaner (v#{VacuumCleaner::VERSION}) API Documentation"
   ]
 end
 
@@ -35,7 +28,7 @@ begin
     gemspec.summary = "Ruby (and Rails) attribute cleaning support, provides some nice default normalization strategies."
     description = <<-DESC
       ** Swoooosh ** - and all those leading and trailing whitespaces are gone, or ** Frooom ** - and the value
-      is normalized to always be prefixed by 'http://' and much more. Works with both plain old Ruby and Rails (ActiveModel
+      is normalized to always be prefixed by 'http://' and much more. Works with both plain old Ruby, and Rails (ActiveModel
       and ActiveSupport).
     DESC
     gemspec.description = description.strip
@@ -51,7 +44,7 @@ begin
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
-  puts "Jeweler not available. Install it with: sudo gem install jeweler"
+  puts "Jeweler, or one of its dependencies, is not available. Install it with: sudo gem install jeweler"
 end
 
 desc 'Clean all generated files (.yardoc and doc/*)'

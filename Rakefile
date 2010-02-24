@@ -1,6 +1,7 @@
 require 'rake'
 require 'rake/testtask'
 require 'yard'
+require File.join(File.dirname(__FILE__), 'lib', 'vacuum_cleaner')
 
 #def gravatarify_version
 #  @gravatarify_version ||= (tmp = YAML.load(File.read('VERSION.yml'))) && [tmp[:major], tmp[:minor], tmp[:patch]] * '.'
@@ -30,6 +31,7 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gemspec|
     gemspec.name = "vacuum_cleaner"
+    gemspec.version = VacuumCleaner::VERSION
     gemspec.summary = "Ruby (and Rails) attribute cleaning support, provides some nice default normalization strategies."
     description = <<-DESC
       ** Swoooosh ** - and all those leading and trailing whitespaces are gone, or ** Frooom ** - and the value

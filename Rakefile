@@ -51,7 +51,6 @@ desc 'Clean all generated files (.yardoc and doc/*)'
 task :clean do |t|
   FileUtils.rm_rf "doc"
   FileUtils.rm_rf "pkg"
-  FileUtils.rm_rf "*.gemspec"
   FileUtils.rm_rf ".yardoc"
 end
 

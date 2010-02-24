@@ -76,7 +76,7 @@ namespace :metrics do
   task :coverage do |t|
     rm_f "doc/coverage"
     mkdir_p "doc/coverage"
-    rcov = %(rcov -Ilib:test --exclude '\/gems\/' -o doc/coverage -T test/unit/*_test.rb )
+    rcov = %(rcov -Ilib:test --exclude '\/gems\/' -o doc/coverage -T test/unit/vacuum_cleaner/*_test.rb -T test/unit/vacuum_cleaner/*/*_test.rb)
     system rcov
   end
   

@@ -28,11 +28,13 @@ Gem::Specification.new do |s|
      "lib/vacuum_cleaner/normalizations/method.rb",
      "lib/vacuum_cleaner/normalizations/url.rb",
      "lib/vacuum_cleaner/normalizer.rb",
+     "rails/init.rb",
      "test/test_helper.rb",
      "test/unit/vacuum_cleaner/normalizations/method_test.rb",
      "test/unit/vacuum_cleaner/normalizations/url_test.rb",
      "test/unit/vacuum_cleaner/normalizations_test.rb",
-     "test/unit/vacuum_cleaner/normalizer_test.rb"
+     "test/unit/vacuum_cleaner/normalizer_test.rb",
+     "vacuum_cleaner.gemspec"
   ]
   s.homepage = %q{http://github.com/lwe/vacuum_cleaner}
   s.licenses = ["LICENSE"]

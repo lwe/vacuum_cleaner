@@ -33,11 +33,7 @@ begin
     gemspec.name = "vacuum_cleaner"
     gemspec.version = VacuumCleaner::VERSION
     gemspec.summary = "Ruby (and Rails) attribute cleaning support, provides some nice default normalization strategies."
-    description = <<-DESC
-      ** Swoooosh ** - and all those leading and trailing whitespaces are gone, or ** Frooom ** - and the value
-      is normalized to always be prefixed by 'http://' and much more. Works with both plain old Ruby, and Rails (ActiveModel
-      and ActiveSupport).
-    DESC
+    description = "Ruby (and Rails) attribute cleaning support, provides some nice and easy to enhance default normalization strategies."
     gemspec.description = description.strip
     gemspec.email = "lukas.westermann@gmail.com"
     gemspec.homepage = "http://github.com/lwe/vacuum_cleaner"

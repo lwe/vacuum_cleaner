@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Lukas Westermann"]
-  s.date = %q{2010-02-24}
+  s.date = %q{2010-03-09}
   s.description = %q{** Swoooosh ** - and all those leading and trailing whitespaces are gone, or ** Frooom ** - and the value
       is normalized to always be prefixed by 'http://' and much more. Works with both plain old Ruby, and Rails (ActiveModel
       and ActiveSupport).}
@@ -33,8 +33,7 @@ Gem::Specification.new do |s|
      "test/unit/vacuum_cleaner/normalizations/method_test.rb",
      "test/unit/vacuum_cleaner/normalizations/url_test.rb",
      "test/unit/vacuum_cleaner/normalizations_test.rb",
-     "test/unit/vacuum_cleaner/normalizer_test.rb",
-     "vacuum_cleaner.gemspec"
+     "test/unit/vacuum_cleaner/normalizer_test.rb"
   ]
   s.homepage = %q{http://github.com/lwe/vacuum_cleaner}
   s.licenses = ["LICENSE"]
@@ -57,13 +56,16 @@ Gem::Specification.new do |s|
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
       s.add_development_dependency(%q<shoulda>, [">= 2.10.2"])
       s.add_development_dependency(%q<rr>, [">= 0.10.5"])
+      s.add_development_dependency(%q<activesupport>, [">= 2.3.5"])
     else
       s.add_dependency(%q<shoulda>, [">= 2.10.2"])
       s.add_dependency(%q<rr>, [">= 0.10.5"])
+      s.add_dependency(%q<activesupport>, [">= 2.3.5"])
     end
   else
     s.add_dependency(%q<shoulda>, [">= 2.10.2"])
     s.add_dependency(%q<rr>, [">= 0.10.5"])
+    s.add_dependency(%q<activesupport>, [">= 2.3.5"])
   end
 end
 

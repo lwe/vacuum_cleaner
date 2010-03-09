@@ -33,7 +33,7 @@ module VacuumCleaner
             block_given? ? (block.arity == 1 ? yield(value) : yield(self, attribute, value)) : value
           end
           original_setter = "#{attribute}#{VacuumCleaner::WITHOUT_NORMALIZATION_SUFFIX}=".to_sym
-          send(:alias_method, original_setter, "#{attribute}=") if instance_methods.include?("#{attribute}=")
+          send(:alias_method, original_setter, "#{attribute}=") if instance_methods.include?(RUBY_VERSION =~ /^1.9/ ? :"#{attribute}=" : "#{attribute}=")
                     
           rb_src = <<-RUBY
             def #{attribute}=(value)                                                                          #  1.  def name=(value)

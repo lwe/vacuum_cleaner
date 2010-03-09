@@ -1,7 +1,9 @@
 require 'rake'
 require 'rake/testtask'
-require 'yard'
+
 require File.join(File.dirname(__FILE__), 'lib', 'vacuum_cleaner')
+
+task :default => :test
 
 desc 'Test the vacuum_cleaner plugin.'
 Rake::TestTask.new(:test) do |t|
@@ -11,13 +13,18 @@ Rake::TestTask.new(:test) do |t|
   t.verbose = true
 end
 
-desc 'Generate documentation for vacuum_cleaner. (requires yard)'
-YARD::Rake::YardocTask.new(:doc) do |t|
-  t.files = ['lib/**/*.rb']
-  t.options = [
-      "--readme", "README.md",
-      "--title", "vacuum_cleaner (v#{VacuumCleaner::VERSION}) API Documentation"
-  ]
+begin
+  require 'yard'
+  desc 'Generate documentation for vacuum_cleaner. (requires yard)'
+  YARD::Rake::YardocTask.new(:doc) do |t|
+    t.files = ['lib/**/*.rb']
+    t.options = [
+        "--readme", "README.md",
+        "--title", "vacuum_cleaner (v#{VacuumCleaner::VERSION}) API Documentation"
+    ]
+  end
+rescue LoadError
+  puts "yard is not available (required for doc task). Install it with: sudo gem install yard (or use rdoc manually)"
 end
 
 begin
@@ -40,7 +47,9 @@ begin
     
     gemspec.add_development_dependency('shoulda', '>= 2.10.2')
     gemspec.add_development_dependency('rr', '>= 0.10.5')
-    # gemspec.add_development_dependency('activesupport', '>= 2.3.5')
+    gemspec.add_development_dependency('activesupport', '>= 2.3.5')
+    
+    gemspec.files.reject! { |file| file =~ /\.gemspec$/ } # kinda redundant
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError

@@ -1,4 +1,4 @@
-module VacuumCleaner #:nodoc:
+module VacuumCleaner
   
   # A small base class for implementing custom value normalizers.
   # Might seem like a slight overkill, yet makes the library pretty
@@ -46,7 +46,7 @@ module VacuumCleaner #:nodoc:
   # +normalize_value+.
   #
   # This can be used together with the +normalizes+ method (see
-  # {{VacuumCleaner::Normalizers.normalizes}} for more on this).
+  # VacuumCleaner::Normalizers#normalizes for more on this).
   class Normalizer
     # Options as supplied to the normalizer.
     attr_reader :options
@@ -59,7 +59,7 @@ module VacuumCleaner #:nodoc:
     # Only override this method if access to the <tt>object</tt> or <tt>attribute</tt> name
     # is required, else override +normalize_value+, makes life much simpler :)
     #
-    # Default behaviour just calls <tt>normalize_value(value)</tt>.
+    # Default behaviour just calls #normalize_value.
     def normalize(object, attribute, value); normalize_value(value) end
     
     # Override this method in subclasses to specifiy custom normalization steps and magic.

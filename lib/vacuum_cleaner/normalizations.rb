@@ -1,4 +1,6 @@
 module VacuumCleaner
+
+  # @private
   # Suffix added to existing setter methods
   WITHOUT_NORMALIZATION_SUFFIX = "_without_normalization"
   
@@ -9,6 +11,27 @@ module VacuumCleaner
     end
         
     module ClassMethods
+      
+      # Enables normalization chain for supplied attributes.
+      #
+      # @example Basic usage for plain old ruby objects.
+      #   class Doctor
+      #     include VacuumCleaner::Normalizations
+      #     attr_accessor :name      
+      #     normalizes :name
+      #   end
+      #
+      # 
+      # @param [Strings, Symbols] attributes list of attribute names to normalize, at least one attribute is required
+      # @param [Hash] options optional list of normalizers to use, like +:downcase => true+. To not run the default
+      #        normalizer ({VacuumCleaner::Normalizer#normalize_value}) set +:default => false+
+      #
+      # @yield [value] optional block to define some one-time custom normalization logic
+      # @yieldparam value can be +nil+, otherwise value as passed through the default normalizer
+      # @yieldreturn should return value as normalized by the block
+      #
+      # @yield [instance, attribute, value] optional (extended) block with all arguments, like the +object+ and
+      #        current +attribute+ name. Everything else behaves the same es the single-value +yield+
       def normalizes(*attributes, &block)
         metaklass = class << self; self; end
         
@@ -50,6 +73,7 @@ module VacuumCleaner
     end    
   end
   
+  # @private
   # Okay, because this library currently does not depend on
   # <tt>ActiveSupport</tt> or anything similar an "independent" camelizing process is
   # required.

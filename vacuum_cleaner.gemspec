@@ -5,14 +5,12 @@
 
 Gem::Specification.new do |s|
   s.name = %q{vacuum_cleaner}
-  s.version = "0.1.0"
+  s.version = "0.5.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Lukas Westermann"]
   s.date = %q{2010-03-09}
-  s.description = %q{** Swoooosh ** - and all those leading and trailing whitespaces are gone, or ** Frooom ** - and the value
-      is normalized to always be prefixed by 'http://' and much more. Works with both plain old Ruby, and Rails (ActiveModel
-      and ActiveSupport).}
+  s.description = %q{Ruby (and Rails) attribute cleaning support, provides some nice and easy to enhance default normalization strategies.}
   s.email = %q{lukas.westermann@gmail.com}
   s.extra_rdoc_files = [
     "README.md"

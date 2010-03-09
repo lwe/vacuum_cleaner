@@ -1,5 +1,9 @@
 module VacuumCleaner
   module Normalizations
+    
+    # 
+    #
+    #
     class UrlNormalizer < Normalizer
       def initialize(options = {})
         options = { :scheme => "http://", :unless => %r{\Ahttps?://}i } if options.nil? || options.empty?

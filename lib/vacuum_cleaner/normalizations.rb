@@ -52,9 +52,9 @@ module VacuumCleaner
   
   # Okay, because this library currently does not depend on
   # <tt>ActiveSupport</tt> or anything similar an "independent" camelizing process is
-  # required. So it works pretty easy.
+  # required.
   #
-  # If <tt>value.to_s</tt> responds to <tt>:camelize</tt>, then call it else use implementation
+  # <b>How it works:</b> If <tt>value.to_s</tt> responds to <tt>:camelize</tt>, then call it else, use implementation
   # taken from http://github.com/rails/rails/blob/master/activesupport/lib/active_support/inflector/methods.rb#L25
   def camelize_value(value)
     value = value.to_s

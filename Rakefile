@@ -19,6 +19,7 @@ begin
   YARD::Rake::YardocTask.new(:doc) do |t|
     t.files = ['lib/**/*.rb']
     t.options = [
+        "--no-private",
         "--readme", "README.md",
         "--title", "vacuum_cleaner (v#{VacuumCleaner::VERSION}) API Documentation"
     ]

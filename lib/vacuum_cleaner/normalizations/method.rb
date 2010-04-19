@@ -13,10 +13,7 @@ module VacuumCleaner
     # Subclasses of the +MethodNormalizer+ can take advantage of it's
     # +normalize_if_respond_to+ method, to easily create custom
     # normalizers based on methods availble on the result value.
-    class MethodNormalizer < Normalizer
-      # Ensure access to default normalization method
-      alias_method :default_normalize_value, :normalize_value
-      
+    class MethodNormalizer < Normalizer      
       # Helper method to "bake" a method normalizer from a method, enabling us to do stuff like.
       #
       #   TitelizeNormalizer = MethodNormalizer.build(:titleize)
@@ -31,11 +28,11 @@ module VacuumCleaner
         super(args)
       end
       
-      # Normalize value by calling the default normalizer (strip + nil if empty)
-      # and then if not <tt>nil</tt> call the method defined.
+      # Normalize value by trying to call the method at hand, if
+      # +value+ does not respond to the defined method, returns +nil+.
       def normalize_value(value)
         sym = options[:method]
-        value.respond_to?(sym) ? value.send(sym) : value
+        value.respond_to?(sym) ? value.send(sym) : nil
       end      
     end
     

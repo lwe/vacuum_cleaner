@@ -17,6 +17,11 @@ class VacuumCleaner::Normalizations::MethodTest < Test::Unit::TestCase
       assert_equal "ELLIOT\n", upcaser.normalize_value("Elliot\n")
       assert_equal "  \t", upcaser.normalize_value("  \t")      
     end
+    
+    should "convert value to <nil> if object does not respond to supplied method" do
+      normalizer = MethodNormalizer.new(:this_method_does_certainly_not_exist)
+      assert_nil normalizer.normalize_value("Elliot")
+    end
   end
     
   context "DowncaseNormalizer#normalize_value" do

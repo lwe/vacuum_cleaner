@@ -35,5 +35,14 @@ class VacuumCleaner::Normalizations::UrlTest < Test::Unit::TestCase
       assert_equal "jabber:jd@sh.com", n.normalize_value("jabber:jd@sh.com")
       assert_equal "https://docs.google.com", n.normalize_value("https://docs.google.com")
     end
+    
+    should "normalize to <nil> if only scheme is given" do
+      assert_nil UrlNormalizer.new.normalize_value("http://")
+      assert_nil UrlNormalizer.new.normalize_value(" http://\n")
+    end
+    
+    should "be stupid, so if some other scheme is used, just override it, haha" do
+      assert_equal "xmpp:mailto:jd@sacred-heart.com", UrlNormalizer.new("xmpp:").normalize_value("mailto:jd@sacred-heart.com")
+    end
   end
 end

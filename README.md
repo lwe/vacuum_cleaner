@@ -3,6 +3,9 @@ Vacuum Cleaner
 
 A Ruby (and Rails) attribute normalization gem, which is supposedly [semver](http://semver.org/)-compliant.
 
+Known to work with Ruby-1.9, JRuby and both Rails 2.3.x and 3. If there are any issues, please file a
+[bug report](http://github.com/lwe/vacuum_cleaner/issues), or fix it and send me a pull request.
+
 Installation
 ------------
 
@@ -19,7 +22,7 @@ Usage
 It creates a new setter method for an attribute and thus allows the gem to reprozess the input value.
 
     class Doctor
-      include VacuumCleaner::Normalizations  # enables #normalizes, NOTE: not required for ActiveRecord models                                             
+      include VacuumCleaner::Normalizations  # enables #normalizes, NOTE: not required for ActiveRecord models
       attr_accessor :name                    # create some reader/writter
       
       normalizes :name                       # enables strip/clean-up magic on attribute :name

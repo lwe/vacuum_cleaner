@@ -3,16 +3,6 @@ require 'rake/testtask'
 
 require File.join(File.dirname(__FILE__), 'lib', 'vacuum_cleaner')
 
-task :default => :test
-
-desc 'Test the vacuum_cleaner plugin.'
-Rake::TestTask.new(:test) do |t|
-  t.libs << 'lib'
-  t.libs << 'test'
-  t.pattern = 'test/**/*_test.rb'
-  t.verbose = true
-end
-
 begin
   require 'yard'
   desc 'Generate documentation for vacuum_cleaner. (requires yard)'
@@ -58,6 +48,26 @@ task :clean do |t|
   FileUtils.rm_rf "pkg"
   FileUtils.rm_rf ".yardoc"
 end
+
+namespace :test do
+  desc 'Test the vacuum_cleaner plugin.'
+  Rake::TestTask.new(:unit) do |t|
+    t.libs << 'lib'
+    t.libs << 'test'
+    t.pattern = 'test/unit/**/*_test.rb'
+    t.verbose = true
+  end
+
+  desc 'Run integration tests for the vacuum_cleaner plugin.'
+  Rake::TestTask.new(:integration) do |t|
+    t.libs << 'lib'
+    t.libs << 'test'
+    t.pattern = 'test/integration/**/*_test.rb'
+    t.verbose = true
+  end
+  
+  task :all => [:'test:unit', :'test:integration']
+end  
 
 namespace :metrics do
   desc 'Report all metrics, i.e. stats and code coverage.'

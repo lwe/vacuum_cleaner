@@ -2,10 +2,10 @@ require 'test_helper'
 
 # load ActiveRecord
 require 'active_record'
-gem 'sqlite3-ruby'
 
-# setup memory database using sqlite3
-ActiveRecord::Base.establish_connection({ :adapter => 'sqlite3', :database => ':memory:'})
+ActiveRecord::Base.establish_connection({
+  :adapter => RUBY_PLATFORM =~ /java/ ? 'jdbcsqlite3' : 'sqlite3',
+  :database => ':memory:'})
 
 # run init.rb
 require File.join(File.dirname(__FILE__), '..', '..', 'init')

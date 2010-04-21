@@ -3,6 +3,7 @@ require 'test_helper'
 # load ActiveRecord
 require 'active_record'
 
+# open connection to in-memory db
 ActiveRecord::Base.establish_connection({
   :adapter => RUBY_PLATFORM =~ /java/ ? 'jdbcsqlite3' : 'sqlite3',
   :database => ':memory:'})
@@ -52,6 +53,14 @@ class ActiveRecordIntegrationTest < ::Test::Unit::TestCase
         ActiveRecord::Base.connection.execute "INSERT INTO dummies VALUES(NULL,'Elliot Reid\n\t');"
         klass = Class.new(ActiveRecord::Base) do; set_table_name 'dummies'; normalizes :name end        
         assert_equal "Elliot Reid\n\t", klass.last.name
+      end
+      
+      should "work with customized setter methods, masking AR-attributes" do
+        klass = Class.new(ActiveRecord::Base) do; set_table_name 'dummies'; def name=(n); self[:name] = n; end; normalizes :name end
+        object = klass.new :name => " J.D.\n"
+        assert_equal "J.D.", object.name
+        object.name = "Dorian\n\r"
+        assert_equal "Dorian", object.name
       end
     end
   end

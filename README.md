@@ -28,17 +28,20 @@ It creates a new setter method for an attribute and thus allows the gem to repro
       normalizes :name                       # enables strip/clean-up magic on attribute :name
     end
     
-    @doc = Doctor.new
-    
-    # set name with leading/trailing spaces
-    @doc.name = "  Elliot Reid\n\t"
-    @doc.name   # => "Elliot Reid"
-    
-    # empty strings => nil
-    @doc.name = "\t\n"
-    @doc.name   # => nil
+Using `normalizes` just adds a default normalization implemenation, which removes leading/trailing
+whitespace and converts spaces only to `nil`. Everything happens upon "set".
 
-Okay, this is it. Now, let the fun part begin...
+    @doc = Doctor.new
+    @doc.name = "  Elliot Reid\n\t"
+    @doc.name   # => "Elliot Reid" => trailing space was stripped
+    
+    @doc.name = "\t\n"
+    @doc.name   # => nil => converted to nil
+
+Okay, this is how it basically works, the `normalizes` call just generates a new setter method,
+which `normalizes` the input value and then calls the original setter method.
+
+What else can be done then?
 
     # can be used with multiple attributes (if they all share the same normalizer)
     normalizes :name, :company
@@ -57,9 +60,12 @@ Okay, this is it. Now, let the fun part begin...
     normalizes :homepage, :url => true
     # "google.com" => "http://google.com"
     # "http://example.com" => "http://example.com" PS: left as is
-    
-Assuming this already allows to fix 99.9% of all attribute normalization cases, if there's
-that special need, then `normalizes` accepts a block:
+
+Take a look at `VacuumCleaner::Normalizer`, about how the process works and how custom
+reusable normalizers can be written. For the-quick-fix-that-shouldnt-have-been-used-but-was
+case or if there's no reuse, `normalizes` takes a block as argument which is called
+after any other normalizer in the chain. Note that normalizers are not halted, nor stopped
+if they return `nil` or `false` or something similar, so ensure that case is handled properly.
 
     # strips all whitespace within a string
     normalizes(:phone) { |value| value.to_s.gsub(/\s+/, '') unless value.nil? }    
@@ -71,9 +77,40 @@ that special need, then `normalizes` accepts a block:
     # "\t\n" => ""
     # nil => ""
     
-Need access to the object within the block? As easy as:
+Need access to the full object within the block? As easy as:
 
     # naming J.D. after some girly girl?
     normalizes(:first_name) do |obj, attribute, value|
       obj.name == "Dorian" ? %w{Agnes Shirley Denise}[rand(3)] : value
     end
+
+Background
+----------
+
+As mentoined earlier `normalizes` creates a new setter method, so let's shortly take a look
+at how.
+
+    normalizes(:name)
+    
+    # 1. creates a :normalize_name method, which contains the normalization chain, block etc.
+    # 2. if :name= exists, it's aliased to :name_without_normalization=
+    # 3. creates a new :name= method, which calls :normalize_name, then tries to
+    #    set the normalized value by one of:
+    #    a) calling :name_without_normalization=, if defined
+    #    b) self[:name] = v, if it responds to :[]= (for ActiveRecord support)
+    #    c) or, as a fallback, sets @name to the result of :normalize_name
+
+Lessons learned, when the need arises to set the value without any normalization and there's
+a setter just use `@object.name_without_normalization = "har har har\n\t"`. Feel free to
+completly override `normalize_<attribute>`, but a much smarter way to add very custom normalizers
+is by a) providing a block to `normalizes` or b) create a custom `VacuumCleaner::Normalizer`
+implementation.
+
+Some info about the different files, might be a good place to look at when trying to figure
+out how to write custom `VacuumCleaner::Normalizer` implemenations, or for a look at how
+it works.
+
+    lib/vacuum_cleaner/normalizer.rb        # Base Normalizer implementation
+    lib/vacuum_cleaner/normalizations/*.rb  # Some default Normalizer implementations, like url, downcase etc.
+    lib/vacuum_cleaner/normalizations.rb    # Provides the `normalizes` method and all the logic etc.
+    

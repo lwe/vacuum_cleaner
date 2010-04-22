@@ -19,7 +19,7 @@ Installation
 Usage
 -----
 
-It creates a new setter method for an attribute and thus allows the gem to reprozess the input value.
+It creates a new setter method for an attribute and thus allows the normalizers defined to reprozess the input value.
 
     class Doctor
       include VacuumCleaner::Normalizations  # enables #normalizes, NOTE: not required for ActiveRecord models

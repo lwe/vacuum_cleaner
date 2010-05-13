@@ -29,5 +29,5 @@ if defined?(::ActiveSupport)
   end
 
   # Set the multibyte proxy class to AS::Multibyte::Chars, which in turn works perfectly with UTF8 chars et al.
-  VacuumCleaner::Normalizations::MethodNormalizer.multibyte_proxy_class = ::ActiveSupport::Multibyte::Chars
+  VacuumCleaner::Normalizations::MethodNormalizer.multibyte_wrapper = ::ActiveSupport::Multibyte::Chars
 end

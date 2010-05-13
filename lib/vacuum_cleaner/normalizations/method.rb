@@ -26,9 +26,13 @@ module VacuumCleaner
         
         # Due to the lack of multibyte support in ruby core, a proxy class like
         # {ActiveSupport::Multibyte::Chars} can be registered here and the proxy
-        # is then used to wrap string values within.
-        def multibyte_proxy_class=(clazz); @multibyte_proxy_class = clazz end        
-        def multibyte_proxy_class; @multibyte_proxy_class end
+        # is then used to wrap string values within, so that methods like `upcase`
+        # or `downcase` work with characters outside the ASCII range as well.
+        #
+        # The wrapper is only used if the value supplied is a string, i.e. responds to
+        # +to_str+.
+        def multibyte_wrapper=(clazz); @multibyte_wrapper = clazz end        
+        def multibyte_wrapper; @multibyte_wrapper end
       end
       
       # Accept either a hash or symbol name.
@@ -36,12 +40,12 @@ module VacuumCleaner
         args = { :method => args } unless args.is_a?(Hash)
         super(args)
       end
-      
+            
       # Normalize value by trying to call the method at hand, if
       # +value+ does not respond to the defined method, returns +nil+.
       def normalize_value(value)
         sym = options[:method]
-        value = MethodNormalizer.multibyte_proxy_class.new(value) if MethodNormalizer.multibyte_proxy_class and value.respond_to?(:to_str)
+        value = MethodNormalizer.multibyte_wrapper.new(value) if MethodNormalizer.multibyte_wrapper and value.respond_to?(:to_str)
         value.respond_to?(sym) ? value.send(sym) : nil
       end      
     end

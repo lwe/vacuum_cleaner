@@ -64,7 +64,18 @@ namespace :test do
     t.verbose = true
   end
   
+  desc 'Run both the integration and unit tests'
   task :all => [:'test:unit', :'test:integration']
+  
+  desc 'Run test with supplied rakes like RAKES=jrake,rake19,rake'
+  task :portability do |t|
+    ENV['RAKES'].split(/[,;\s]\s*/).each do |rake_cmd|
+      puts
+      puts " * * * runing `#{rake_cmd} test:all`"
+      puts      
+      system("#{rake_cmd} test:all")
+    end
+  end
 end  
 
 namespace :metrics do
@@ -85,7 +96,7 @@ namespace :metrics do
   task :coverage do |t|
     rm_f "doc/coverage"
     mkdir_p "doc/coverage"
-    rcov = %(rcov -Ilib:test --exclude '\/gems\/' -o doc/coverage -T test/unit/vacuum_cleaner/*_test.rb -T test/unit/vacuum_cleaner/*/*_test.rb)
+    rcov = %(rcov -Ilib:test --exclude '\/gems\/' -o doc/coverage -T test/integration/*_test.rb -T test/unit/vacuum_cleaner/*_test.rb -T test/unit/vacuum_cleaner/*/*_test.rb)
     system rcov
   end
   

@@ -29,7 +29,7 @@ module VacuumCleaner
           num.gsub!(/([^\d\-])\./, '\1')     # II. remove misleading points in units like "Mio." or "SFr."
           num.gsub!(/[^\d,\.\-]/i, '')       # III. remove all chars we are not interested in, like anything not related to numeric :)
           num.gsub!("--", '')                # IV. remove double dashes, like often used in CH
-          num.gsub(",", '.').gsub(".") { $'.include?(".") ? "" : "." }  # V. intelligently convert comma to points...          
+          num = num.gsub(",", '.').gsub(".") { $'.include?(".") ? "" : "." }.gsub(/\.\z/, '')  # V. intelligently convert comma to points...
         else
           value
         end

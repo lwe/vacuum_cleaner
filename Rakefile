@@ -69,6 +69,7 @@ namespace :test do
   
   desc 'Run test with supplied rakes like RAKES=jrake,rake19,rake'
   task :portability do |t|
+    raise "No RAKES specified e.g. add RAKES=rake,rake19" unless ENV['RAKES']
     ENV['RAKES'].split(/[,;\s]\s*/).each do |rake_cmd|
       puts
       puts " * * * runing `#{rake_cmd} test:all`"

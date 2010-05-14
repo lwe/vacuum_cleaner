@@ -36,13 +36,16 @@ class VacuumCleaner::NormalizationsTest < Test::Unit::TestCase
     context "ClassMethods#normalizes" do
       should "throw ArgumentError if no attributes are passed in" do
         assert_raise ArgumentError do
-          klass = Class.new do
-            include VacuumCleaner::Normalizations
-            normalizes
-          end
-        end
+          klass = Class.new { include VacuumCleaner::Normalizations; normalizes }
+        end        
       end
       
+      should "throw ArgumentError if invalid/unknown normalizer is used" do
+        assert_raise ArgumentError do
+          klass = Class.new { include VacuumCleaner::Normalizations; normalizes(:name, :foobar_unkown_normalizer => true) }
+        end
+      end        
+       
       should "take a symbol as argument" do
         assert_respond_to Class.new { include VacuumCleaner::Normalizations; normalizes(:name) }, :normalizes
       end

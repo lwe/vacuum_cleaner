@@ -1,4 +1,4 @@
 doc
 pkg
 .yardoc
-test/*.watcher
+*.watcher

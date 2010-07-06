@@ -1,1 +1,5 @@
-require File.join(File.dirname(__FILE__), 'rails', 'init')
+require 'vacuum_cleaner'
+
+if Object.const_defined?("ActiveRecord")
+  ActiveRecord::Base.send(:include, VacuumCleaner::Normalizations)
+end

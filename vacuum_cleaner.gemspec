@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{vacuum_cleaner}
-  s.version = "1.0.0"
+  s.version = "1.0.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Lukas Westermann"]
-  s.date = %q{2010-04-21}
+  s.date = %q{2010-09-09}
   s.description = %q{Ruby (and Rails) attribute cleaning support, provides some nice and easy to enhance default normalization strategies.}
   s.email = %q{lukas.westermann@gmail.com}
   s.extra_rdoc_files = [
@@ -23,13 +23,17 @@ Gem::Specification.new do |s|
      "init.rb",
      "lib/vacuum_cleaner.rb",
      "lib/vacuum_cleaner/normalizations.rb",
+     "lib/vacuum_cleaner/normalizations/active_support.rb",
      "lib/vacuum_cleaner/normalizations/method.rb",
+     "lib/vacuum_cleaner/normalizations/numeric.rb",
      "lib/vacuum_cleaner/normalizations/url.rb",
      "lib/vacuum_cleaner/normalizer.rb",
-     "rails/init.rb",
+     "lib/vacuum_cleaner/railtie.rb",
      "test/integration/active_record_integration_test.rb",
+     "test/integration/active_support_integration_test.rb",
      "test/test_helper.rb",
      "test/unit/vacuum_cleaner/normalizations/method_test.rb",
+     "test/unit/vacuum_cleaner/normalizations/numeric_test.rb",
      "test/unit/vacuum_cleaner/normalizations/url_test.rb",
      "test/unit/vacuum_cleaner/normalizations_test.rb",
      "test/unit/vacuum_cleaner/normalizer_test.rb"
@@ -38,12 +42,14 @@ Gem::Specification.new do |s|
   s.licenses = ["LICENSE"]
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.6}
+  s.rubygems_version = %q{1.3.7}
   s.summary = %q{Ruby (and Rails) attribute cleaning support, provides some nice default normalization strategies.}
   s.test_files = [
     "test/integration/active_record_integration_test.rb",
+     "test/integration/active_support_integration_test.rb",
      "test/test_helper.rb",
      "test/unit/vacuum_cleaner/normalizations/method_test.rb",
+     "test/unit/vacuum_cleaner/normalizations/numeric_test.rb",
      "test/unit/vacuum_cleaner/normalizations/url_test.rb",
      "test/unit/vacuum_cleaner/normalizations_test.rb",
      "test/unit/vacuum_cleaner/normalizer_test.rb"
@@ -53,7 +59,7 @@ Gem::Specification.new do |s|
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
     s.specification_version = 3
 
-    if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
+    if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_development_dependency(%q<shoulda>, [">= 2.10.2"])
       s.add_development_dependency(%q<activesupport>, [">= 2.3.5"])
     else

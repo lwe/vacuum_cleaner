@@ -1,7 +1,7 @@
 require 'rake'
 require 'rake/testtask'
-
-require File.join(File.dirname(__FILE__), 'lib', 'vacuum_cleaner')
+$: << File.join(File.dirname(__FILE__), 'lib')
+require 'vacuum_cleaner'
 
 begin
   require 'yard'
@@ -35,7 +35,7 @@ begin
     gemspec.add_development_dependency('shoulda', '>= 2.10.2')
     gemspec.add_development_dependency('activesupport', '>= 2.3.5')
     
-    gemspec.files.reject! { |file| file =~ /\.gemspec$/ } # kinda redundant
+    gemspec.files.reject! { |file| file =~ /\.gemspec$/ || file =~ /\.png$/ } # do not include gemspec + png files
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError

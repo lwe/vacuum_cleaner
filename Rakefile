@@ -35,7 +35,7 @@ begin
     gemspec.add_development_dependency('shoulda', '>= 2.10.2')
     gemspec.add_development_dependency('activesupport', '>= 2.3.5')
     
-    gemspec.files.reject! { |file| file =~ /\.gemspec$/ || file =~ /\.png$/ } # do not include gemspec + png files
+    gemspec.files.reject! { |file| file =~ /\.gemspec$/ || file =~ /\.png$/ || file =~ /\.watcher_example+$/} # do not include gemspec + png files
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError

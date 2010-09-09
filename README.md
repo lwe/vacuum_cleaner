@@ -11,7 +11,7 @@ Installation
 
 1. Install as gem from [rubygems](http://rubygems.org/gems/vacuum_cleaner): `sudo gem install vacuum_cleaner`.
    Then load it in your app: `require 'rubygems'; require 'vacuum_cleaner'`      
-2. Install as gem using [bundler](http://github.com/carlhuda/bundler), add `gem "vacuum_cleaner"` to your
+2. Install as gem using [bundler](http://gembundler.com), add `gem "vacuum_cleaner"` to your
    `Gemfile` and run `bundle install`
 3. Or as a Rails plugin, for Rails 2.x run `./script/plugin install git://github.com/lwe/vacuum_cleaner.git`, when using Rails 3.x
    goodeness run `rails plugin install git://github.com/lwe/vacuum_cleaner.git`
@@ -19,7 +19,7 @@ Installation
 Usage
 -----
 
-It creates a new setter method for an attribute and thus allows the normalizers defined to reprozess the input value.
+It creates a new setter method for an attribute and thus allows the normalizers defined to reprocess the input value.
 
     class Doctor
       include VacuumCleaner::Normalizations  # enables #normalizes, NOTE: not required for ActiveRecord models
@@ -100,7 +100,7 @@ at how.
     #    b) self[:name] = v, if it responds to :[]= (for ActiveRecord support)
     #    c) or, as a fallback, sets @name to the result of :normalize_name
 
-Lessons learned, when the need arises to set the value without any normalization and there's
+Lessons learned: when the need arises to set the value without any normalization and there's
 a setter just use `@object.name_without_normalization = "har har har\n\t"`. Feel free to
 completly override `normalize_<attribute>`, but a much smarter way to add very custom normalizers
 is by a) providing a block to `normalizes` or b) create a custom `VacuumCleaner::Normalizer`

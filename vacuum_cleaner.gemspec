@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{vacuum_cleaner}
-  s.version = "1.0.1"
+  s.version = "1.0.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Lukas Westermann"]
-  s.date = %q{2010-09-09}
+  s.date = %q{2010-09-10}
   s.description = %q{Ruby (and Rails) attribute cleaning support, provides some nice and easy to enhance default normalization strategies.}
   s.email = %q{lukas.westermann@gmail.com}
   s.extra_rdoc_files = [
@@ -28,7 +28,6 @@ Gem::Specification.new do |s|
      "lib/vacuum_cleaner/normalizations/numeric.rb",
      "lib/vacuum_cleaner/normalizations/url.rb",
      "lib/vacuum_cleaner/normalizer.rb",
-     "lib/vacuum_cleaner/railtie.rb",
      "test/integration/active_record_integration_test.rb",
      "test/integration/active_support_integration_test.rb",
      "test/test_helper.rb",

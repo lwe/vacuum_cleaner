@@ -191,5 +191,31 @@ class VacuumCleaner::NormalizationsTest < Test::Unit::TestCase
         assert_equal [obj.object_id, :name, "Carla"], obj.name
       end
     end
+    
+    context "ClassMethods#normalized_attributes" do
+      should "keep an array with all normalized attributes" do
+        assert_equal [:name], Doctor.normalized_attributes
+        assert_equal [:last_name, :first_name], Person.normalized_attributes
+      end
+      
+      should "guard against calling `normalizes` twice for an attribute, to avoid stack level too deep error!" do
+        klass = Class.new(Doctor) do
+          attr_accessor :coolness
+          normalizes :coolness, :downcase => true
+        end
+        
+        assert_equal [:name, :coolness], klass.normalized_attributes
+        assert_equal [:name], Doctor.normalized_attributes
+        
+        klass.send(:normalizes, :coolness, :upcase => true) # should be ignored!
+        assert_equal [:name, :coolness], klass.normalized_attributes
+        
+        obj = klass.new
+        assert_nothing_raised do
+          obj.coolness = "AWESOME"
+        end
+        assert_equal "awesome", obj.coolness
+      end
+    end
   end
 end

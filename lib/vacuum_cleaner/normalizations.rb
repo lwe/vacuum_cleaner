@@ -14,6 +14,17 @@ module VacuumCleaner
         
     module ClassMethods
       
+      # List of already normalized attributes, to keep everything safe
+      # when calling `normalizes` twice for a certain attribute.
+      #
+      # When called for the first time checks it's `superclass` for any
+      # normalized attributes.
+      def normalized_attributes
+        @normalized_attributes ||= [].tap do |ary|
+          superclass.normalized_attributes.each { |a| ary << a } if superclass && superclass.respond_to?(:normalized_attributes)
+        end
+      end
+      
       # Enables normalization chain for supplied attributes.
       #
       # @example Basic usage for plain old ruby objects.
@@ -51,21 +62,27 @@ module VacuumCleaner
         
         attributes.each do |attribute|
           attribute = attribute.to_sym
-          send(:define_method, :"normalize_#{attribute}") do |value|
-            value = normalizers.inject(value) { |v,n| n.normalize(self, attribute, v) }
-            block_given? ? (block.arity == 1 ? yield(value) : yield(self, attribute, value)) : value
-          end
-          original_setter = "#{attribute}#{VacuumCleaner::WITHOUT_NORMALIZATION_SUFFIX}=".to_sym
-          send(:alias_method, original_setter, "#{attribute}=") if instance_methods.include?(RUBY_VERSION =~ /^1.9/ ? :"#{attribute}=" : "#{attribute}=")
+          
+          # guard against calling it twice!
+          unless normalized_attributes.include?(attribute)
+            send(:define_method, :"normalize_#{attribute}") do |value|
+              value = normalizers.inject(value) { |v,n| n.normalize(self, attribute, v) }
+              block_given? ? (block.arity == 1 ? yield(value) : yield(self, attribute, value)) : value
+            end
+            original_setter = "#{attribute}#{VacuumCleaner::WITHOUT_NORMALIZATION_SUFFIX}=".to_sym
+            send(:alias_method, original_setter, "#{attribute}=") if instance_methods.include?(RUBY_VERSION =~ /^1.9/ ? :"#{attribute}=" : "#{attribute}=")
                     
-          class_eval <<-RUBY, __FILE__, __LINE__+1
-            def #{attribute}=(value)                                                                          #  1.  def name=(value)
-              value = send(:'normalize_#{attribute}', value)                                                  #  2.    value = send(:'normalize_name', value)
-              return send(#{original_setter.inspect}, value) if respond_to?(#{original_setter.inspect})       #  3.    return send(:'name_wi...=', value) if respond_to?(:'name_wi...=')
-              return send(:[]=, #{attribute.inspect}, value) if respond_to?(:[]=)                             #  4.    return send(:[]=, :name, value) if respond_to?(:[]=)
-              @#{attribute} = value                                                                           #  5.   @name = value
-            end                                                                                               #  6.  end
-          RUBY
+            class_eval <<-RUBY, __FILE__, __LINE__+1
+              def #{attribute}=(value)                                                                          #  1.  def name=(value)
+                value = send(:'normalize_#{attribute}', value)                                                  #  2.    value = send(:'normalize_name', value)
+                return send(#{original_setter.inspect}, value) if respond_to?(#{original_setter.inspect})       #  3.    return send(:'name_wi...=', value) if respond_to?(:'name_wi...=')
+                return send(:[]=, #{attribute.inspect}, value) if respond_to?(:[]=)                             #  4.    return send(:[]=, :name, value) if respond_to?(:[]=)
+                @#{attribute} = value                                                                           #  5.   @name = value
+              end                                                                                               #  6.  end
+            RUBY
+            
+            normalized_attributes << attribute
+          end
         end
       end      
     end    

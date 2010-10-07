@@ -9,7 +9,7 @@ require 'vacuum_cleaner/normalizations'
 # @see VacuumCleaner::Normalizer
 module VacuumCleaner
   # +VacuumCleaner+ version
-  VERSION = "1.0.2".freeze
+  VERSION = "1.0.3".freeze
 end
 
 if defined?(ActiveSupport) && ActiveSupport.respond_to?(:on_load)

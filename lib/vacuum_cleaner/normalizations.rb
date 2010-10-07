@@ -35,8 +35,6 @@ module VacuumCleaner
       # @yield [instance, attribute, value] optional (extended) block with all arguments, like the +object+ and
       #        current +attribute+ name. Everything else behaves the same es the single-value +yield+
       def normalizes(*attributes, &block)
-        metaklass = class << self; self; end
-        
         normalizations = attributes.last.is_a?(Hash) ? attributes.pop : {}
         raise ArgumentError, "You need to supply at least one attribute" if attributes.empty?
         
@@ -60,7 +58,7 @@ module VacuumCleaner
           original_setter = "#{attribute}#{VacuumCleaner::WITHOUT_NORMALIZATION_SUFFIX}=".to_sym
           send(:alias_method, original_setter, "#{attribute}=") if instance_methods.include?(RUBY_VERSION =~ /^1.9/ ? :"#{attribute}=" : "#{attribute}=")
                     
-          rb_src = <<-RUBY
+          class_eval <<-RUBY, __FILE__, __LINE__+1
             def #{attribute}=(value)                                                                          #  1.  def name=(value)
               value = send(:'normalize_#{attribute}', value)                                                  #  2.    value = send(:'normalize_name', value)
               return send(#{original_setter.inspect}, value) if respond_to?(#{original_setter.inspect})       #  3.    return send(:'name_wi...=', value) if respond_to?(:'name_wi...=')
@@ -68,8 +66,6 @@ module VacuumCleaner
               @#{attribute} = value                                                                           #  5.   @name = value
             end                                                                                               #  6.  end
           RUBY
-          
-          module_eval rb_src, __FILE__, __LINE__
         end
       end      
     end    

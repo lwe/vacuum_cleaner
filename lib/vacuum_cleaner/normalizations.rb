@@ -64,7 +64,7 @@ module VacuumCleaner
             def #{attribute}=(value)                                                                          #  1.  def name=(value)
               value = send(:'normalize_#{attribute}', value)                                                  #  2.    value = send(:'normalize_name', value)
               return send(#{original_setter.inspect}, value) if respond_to?(#{original_setter.inspect})       #  3.    return send(:'name_wi...=', value) if respond_to?(:'name_wi...=')
-              return self[#{attribute.inspect}] = value if respond_to?(:[]=)                                  #  4.    return self[:name] = value if respond_to?(:write_attribute)
+              return send(:write_attribute, #{attribute.inspect}, value) if respond_to?(:write_attribute)     #  4.    return send(:write_attribute, :name], value) if respond_to?(:write_attribute)
               @#{attribute} = value                                                                           #  5.   @name = value
             end                                                                                               #  6.  end
           RUBY

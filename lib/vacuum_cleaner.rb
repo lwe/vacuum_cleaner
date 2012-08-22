@@ -8,10 +8,9 @@ require 'vacuum_cleaner/normalizations'
 # @see VacuumCleaner::Normalizations
 # @see VacuumCleaner::Normalizer
 module VacuumCleaner
+  autoload :VERSION, 'vacuum_cleaner/version'
 end
 
 if defined?(ActiveSupport) && ActiveSupport.respond_to?(:on_load)
   ActiveSupport.on_load(:active_record) { include VacuumCleaner::Normalizations }
-elsif defined?(ActiveRecord)
-  ActiveRecord::Base.send(:include, VacuumCleaner::Normalizations)
 end

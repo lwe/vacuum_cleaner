@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    vacuum_cleaner (1.1.0)
+    vacuum_cleaner (2.0.0)
 
 GEM
   remote: http://rubygems.org/

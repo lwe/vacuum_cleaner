@@ -2,14 +2,12 @@ require 'test_helper'
 
 # load ActiveRecord
 require 'active_record'
+require 'vacuum_cleaner'
 
 # open connection to in-memory db
 ActiveRecord::Base.establish_connection({
   :adapter => RUBY_PLATFORM =~ /java/ ? 'jdbcsqlite3' : 'sqlite3',
   :database => ':memory:'})
-
-# run init.rb
-require File.join(File.dirname(__FILE__), '..', '..', 'init')
 
 puts "Running integration tests against: active_record-#{ActiveRecord::VERSION::STRING}"
 

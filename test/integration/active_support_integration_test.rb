@@ -2,18 +2,16 @@
 $KCODE = 'U' if RUBY_VERSION < '1.9'
 
 require 'test_helper'
-
-# run init.rb, which should load VacuumCleaner
 require 'active_support'
 require 'active_support/version'
 
-require File.join(File.dirname(__FILE__), '..', '..', 'init')
+require 'vacuum_cleaner'
 
 puts "Running integration tests against: active_support-#{ActiveSupport::VERSION::STRING}"
 
 class ActiveSupportIntegrationTest < ::Test::Unit::TestCase
   include VacuumCleaner::Normalizations
-  
+
   context "VacuumCleaner::Normalizations::ActiveSupport" do
     context "TransliterateNormalizer" do
       should "call AS::Inflector#translitrate if value responds to to_str" do
@@ -22,12 +20,12 @@ class ActiveSupportIntegrationTest < ::Test::Unit::TestCase
         assert_equal "Bern", TransliterateNormalizer.new.normalize_value("Bern")
         assert_equal "", TransliterateNormalizer.new.normalize_value("")
         assert_equal "\n ", TransliterateNormalizer.new.normalize_value("\n ")
-        
+
         assert_nil TransliterateNormalizer.new.normalize_value(nil)
         assert_nil TransliterateNormalizer.new.normalize_value(12.5)
       end
     end
-    
+
     context "TitleizeNormalizer" do
       should "call #titleize on string, else return nil" do
         assert_equal "My First Day", TitleizeNormalizer.new.normalize_value("my first day")
@@ -36,7 +34,7 @@ class ActiveSupportIntegrationTest < ::Test::Unit::TestCase
         assert_nil TitleizeNormalizer.new.normalize_value(42)
       end
     end
-    
+
     context "HumanizeNormalizer" do
       should "call #humanize on string, else return nil" do
         assert_equal "My old lady", HumanizeNormalizer.new.normalize_value("My Old Lady")
